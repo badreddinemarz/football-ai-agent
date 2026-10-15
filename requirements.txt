@@ -1,0 +1,10 @@
+duckdb
+pandas
+requests
+ollama
+pypdf
+sentence-transformers
+chromadb
+streamlit
+python-dotenv
+pytest
