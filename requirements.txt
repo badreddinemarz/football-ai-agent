@@ -8,3 +8,4 @@ chromadb
 streamlit
 python-dotenv
 pytest
+anthropic

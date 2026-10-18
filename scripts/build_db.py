@@ -140,6 +140,45 @@ def build_events_tables(match_ids, nicknames):
     return pd.DataFrame(shots), pd.DataFrame(cards), player_stats
 
 
+# Views = a "semantic layer": the tricky logic is written once, correctly, here, so the LLM only
+# has to write simple queries. With the raw tables, qwen2.5:7b often got team goals (home/away,
+# own goals) and shoot-out winners wrong.
+VIEWS = {
+    # One row per real goal (no shoot-out kicks), with the competition: no JOIN needed.
+    "goal_events": """
+        SELECT s.match_id, m.competition, m.season, m.stage, s.period, s.minute, s.team,
+               s.player_id, s.player_nickname, s.assist_player_nickname, s.shot_type, s.body_part, s.xg
+        FROM shots s JOIN matches m USING (match_id)
+        WHERE s.is_goal AND NOT s.is_shootout""",
+    # One row per team per match, seen from that team. Scores come from `matches`, so own goals count.
+    # A knockout draw is decided by the penalty shoot-out.
+    "team_matches": """
+        WITH sides AS (
+            SELECT match_id, competition, season, match_date, stage,
+                   home_team AS team, away_team AS opponent, home_score AS goals_for, away_score AS goals_against
+            FROM matches
+            UNION ALL
+            SELECT match_id, competition, season, match_date, stage,
+                   away_team, home_team, away_score, home_score
+            FROM matches
+        ),
+        shootouts AS (
+            SELECT match_id, team, COUNT(*) AS kicks_scored FROM shots
+            WHERE is_shootout AND is_goal GROUP BY match_id, team
+        )
+        SELECT s.*,
+               mine.kicks_scored IS NOT NULL OR theirs.kicks_scored IS NOT NULL AS decided_by_shootout,
+               CASE WHEN s.goals_for > s.goals_against THEN 'win'
+                    WHEN s.goals_for < s.goals_against THEN 'loss'
+                    WHEN COALESCE(mine.kicks_scored, 0) > COALESCE(theirs.kicks_scored, 0) THEN 'win'
+                    WHEN COALESCE(mine.kicks_scored, 0) < COALESCE(theirs.kicks_scored, 0) THEN 'loss'
+                    ELSE 'draw' END AS result
+        FROM sides s
+        LEFT JOIN shootouts mine ON mine.match_id = s.match_id AND mine.team = s.team
+        LEFT JOIN shootouts theirs ON theirs.match_id = s.match_id AND theirs.team = s.opponent""",
+}
+
+
 def main() -> None:
     match_files = sorted((RAW_DIR / "matches").rglob("*.json"))
     if not match_files:
@@ -159,6 +198,9 @@ def main() -> None:
         con.execute(f"CREATE TABLE {name} AS SELECT * FROM df")
         con.unregister("df")
         print(f"{name:20s} {len(df):>6} rows")
+    for name, sql in VIEWS.items():
+        con.execute(f"CREATE VIEW {name} AS {sql}")
+        print(f"{name:20s} {con.execute(f'SELECT COUNT(*) FROM {name}').fetchone()[0]:>6} rows (view)")
     con.close()
     print(f"Database written to {DB_PATH}")
 

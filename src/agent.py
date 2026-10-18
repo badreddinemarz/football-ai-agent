@@ -15,9 +15,13 @@ SYSTEM_PROMPT = (
     "- query_stats_database: statistics of the 2022 FIFA World Cup and UEFA Euro 2024 "
     "(matches, scores, goals, shots, xG, cards, lineups, passes).\n"
     "- search_laws_of_the_game: the official IFAB Laws of the Game (the rules of football).\n"
-    "Use the tools to answer; a question can need both. Base your answer only on what the tools return. "
-    "If the question is about neither topic, say that you can only help with these two topics. "
-    "Answer in English, in a few sentences. When you use the Laws, cite the law, e.g. (Law 11)."
+    "Rules:\n"
+    "1. Split the question into its parts. Each statistics part needs query_stats_database, each rules part "
+    "needs search_laws_of_the_game. A question with both kinds of parts needs BOTH tools: call them together.\n"
+    "2. Never answer from memory: every number must come from query_stats_database, every rule from "
+    "search_laws_of_the_game. Cite a law, e.g. (Law 11), only if it appears in the passages you received.\n"
+    "3. If the question is about neither topic, say that you can only help with these two topics.\n"
+    "Answer in English, in a few sentences."
 )
 
 TOOLS = [
@@ -90,6 +94,7 @@ def assistant_message(response: LLMResponse) -> dict:
         "role": "assistant",
         "content": response.text,
         "tool_calls": [{"function": {"name": c["name"], "arguments": c["arguments"]}} for c in response.tool_calls],
+        "raw": response.raw,  # Claude only: its blocks, thinking included, sent back unchanged
     }
 
 
