@@ -1,0 +1,35 @@
+{"id": "r01", "question": "Is there offside from a throw-in?", "question_fr": "Le hors-jeu existe-t-il sur une touche ?", "expected": [[11, "3. No offence"]]}
+{"id": "r02", "question": "Can a player be offside when receiving the ball directly from a throw-in?", "question_fr": "Peut-on être hors-jeu sur une rentrée de touche ?", "expected": [[11, "3. No offence"]]}
+{"id": "r03", "question": "Is a player offside when level with the second-last opponent?", "question_fr": "Is a player offside when level with the second-last opponent?", "expected": [[11, "1. Offside position"]]}
+{"id": "r04", "question": "What is the sanction for an offside offence?", "question_fr": "Quelle est la sanction pour un hors-jeu ?", "expected": [[11, "4. Offences and sanctions"]]}
+{"id": "r05", "question": "Can a player be offside in their own half of the field?", "question_fr": "Est-ce qu'un joueur dans sa propre moitié de terrain peut être hors-jeu ?", "expected": [[11, "1. Offside position"]]}
+{"id": "r06", "question": "What is the maximum number of substitutes in official competitions?", "question_fr": "Combien de remplacements maximum sont autorisés en compétition officielle ?", "expected": [[3, "2. Number of substitutions"]]}
+{"id": "r07", "question": "What is the minimum number of players for a match to start?", "question_fr": "Combien de joueurs faut-il au minimum pour qu'un match puisse commencer ?", "expected": [[3, "1. Number of players"]]}
+{"id": "r08", "question": "Can a player change places with the goalkeeper?", "question_fr": "Un joueur peut-il échanger sa place avec le gardien de but ?", "expected": [[3, "4. Changing the goalkeeper"]]}
+{"id": "r09", "question": "Must the team captain wear an armband?", "question_fr": "Le capitaine doit-il porter un brassard ?", "expected": [[3, "10. Team captain"], [4, "2. Compulsory equipment"]]}
+{"id": "r10", "question": "How long is each half of a match?", "question_fr": "Quelle est la durée d'une mi-temps ?", "expected": [[7, "1. Periods of play"]]}
+{"id": "r11", "question": "How long is the half-time interval?", "question_fr": "Combien de temps dure la pause à la mi-temps ?", "expected": [[7, "2. Half-time interval"]]}
+{"id": "r12", "question": "Why does the referee add allowance for time lost?", "question_fr": "Pourquoi l'arbitre ajoute-t-il du temps additionnel ?", "expected": [[7, "3. Allowance for time lost"]]}
+{"id": "r13", "question": "What must the circumference of the ball be?", "question_fr": "Quelle doit être la circonférence du ballon ?", "expected": [[2, "1. Qualities and measurements"]]}
+{"id": "r14", "question": "What happens if the ball becomes defective during the match?", "question_fr": "Que se passe-t-il si le ballon éclate pendant le match ?", "expected": [[2, "2. Replacement of a defective ball"]]}
+{"id": "r15", "question": "Can a goal be scored directly from a corner kick?", "question_fr": "Peut-on marquer directement sur un corner ?", "expected": [[17, "Introduction"]]}
+{"id": "r16", "question": "Can a goal be scored directly from a throw-in?", "question_fr": "Peut-on marquer un but directement sur une touche ?", "expected": [[15, "Introduction"]]}
+{"id": "r17", "question": "Can a goal be scored directly from a goal kick?", "question_fr": "Un gardien peut-il marquer directement sur un dégagement aux six mètres ?", "expected": [[16, "Introduction"]]}
+{"id": "r18", "question": "Can a goal be scored directly from the kick-off?", "question_fr": "Peut-on marquer directement sur le coup d'envoi ?", "expected": [[8, "1. Kick-off"]]}
+{"id": "r19", "question": "What are the dimensions of the penalty area?", "question_fr": "Quelles sont les dimensions de la surface de réparation ?", "expected": [[1, "6. The penalty area"]]}
+{"id": "r20", "question": "What length must the field be for international matches?", "question_fr": "Quelle longueur doit faire un terrain pour un match international ?", "expected": [[1, "4. Dimensions for international matches"]]}
+{"id": "r21", "question": "Are players allowed to wear jewellery during the match?", "question_fr": "Un joueur a-t-il le droit de porter des bijoux pendant le match ?", "expected": [[4, "1. Safety"]]}
+{"id": "r22", "question": "What is the compulsory equipment of a player?", "question_fr": "Quel équipement est obligatoire pour un joueur ?", "expected": [[4, "2. Compulsory equipment"]]}
+{"id": "r23", "question": "Which offences are punished with a red card (sending-off)?", "question_fr": "Pour quelles fautes un joueur reçoit-il un carton rouge ?", "expected": [[12, "4. Disciplinary action"]]}
+{"id": "r24", "question": "When is handling the ball an offence?", "question_fr": "Quand une main est-elle sanctionnée ?", "expected": [[12, "1. Direct free kick"]]}
+{"id": "r25", "question": "When does the referee award an indirect free kick?", "question_fr": "Dans quels cas l'arbitre accorde-t-il un coup franc indirect ?", "expected": [[12, "2. Indirect free kick"]]}
+{"id": "r26", "question": "Can the goalkeeper hold the ball in their hands for more than eight seconds?", "question_fr": "Le gardien peut-il garder le ballon dans les mains plus de huit secondes ?", "expected": [[12, "3. Corner kick"], [17, "Introduction"]]}
+{"id": "r27", "question": "How far from the ball must opponents be at a free kick?", "question_fr": "À quelle distance du ballon doivent se placer les adversaires sur un coup franc ?", "expected": [[13, "2. Procedure"]]}
+{"id": "r28", "question": "Where is the ball placed for a penalty kick?", "question_fr": "Où est placé le ballon pour un penalty ?", "expected": [[14, "1. Procedure"]]}
+{"id": "r29", "question": "Can the goalkeeper move off the goal line before a penalty kick is taken?", "question_fr": "Le gardien a-t-il le droit d'avancer avant le tir d'un penalty ?", "expected": [[14, "1. Procedure"], [14, "2. Offences and sanctions"], [14, "3. Summary table"]]}
+{"id": "r30", "question": "How are penalties (penalty shoot-out) taken?", "question_fr": "Comment se déroule une séance de tirs au but ?", "expected": [[10, "3. Penalties (penalty shoot-out)"]]}
+{"id": "r31", "question": "When is a goal scored?", "question_fr": "Quand un but est-il accordé ?", "expected": [[10, "1. Goal scored"]]}
+{"id": "r32", "question": "What is the correct procedure for taking a throw-in?", "question_fr": "Comment effectuer correctement une rentrée de touche ?", "expected": [[15, "1. Procedure"]]}
+{"id": "r33", "question": "What is a dropped ball and when is it used?", "question_fr": "Qu'est-ce qu'une balle à terre et quand l'utilise-t-on ?", "expected": [[8, "2. Dropped ball"]]}
+{"id": "r34", "question": "Does the ball remain in play when it touches the referee?", "question_fr": "Le ballon reste-t-il en jeu s'il touche l'arbitre ?", "expected": [[9, "2. Ball in play"]]}
+{"id": "r35", "question": "What are the duties of the fourth official?", "question_fr": "Quel est le rôle du quatrième arbitre ?", "expected": [[6, "2. Fourth official"]]}

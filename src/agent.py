@@ -1,0 +1,144 @@
+"""Agent: the LLM picks a tool (statistics database or Laws of the Game), we run it, it answers.
+
+Small local models call tools badly: they may answer without a tool, invent a tool name or send
+wrong arguments. The loop must survive all of that and always return an answer.
+"""
+
+from src.llm import LLMResponse, chat
+from src.rag_tool import retrieve, to_search_query
+from src.sql_tool import answer_with_sql
+
+MAX_TURNS = 3
+
+SYSTEM_PROMPT = (
+    "You are a football assistant with two tools:\n"
+    "- query_stats_database: statistics of the 2022 FIFA World Cup and UEFA Euro 2024 "
+    "(matches, scores, goals, shots, xG, cards, lineups, passes).\n"
+    "- search_laws_of_the_game: the official IFAB Laws of the Game (the rules of football).\n"
+    "Use the tools to answer; a question can need both. Base your answer only on what the tools return. "
+    "If the question is about neither topic, say that you can only help with these two topics. "
+    "Answer in English, in a few sentences. When you use the Laws, cite the law, e.g. (Law 11)."
+)
+
+TOOLS = [
+    {
+        "type": "function",
+        "function": {
+            "name": "query_stats_database",
+            "description": "Statistics of the 2022 FIFA World Cup and UEFA Euro 2024: matches, scores, goals, "
+                           "shots, xG, cards, lineups, passes. Use it for any question about numbers, players, "
+                           "teams or matches of these two competitions.",
+            "parameters": {
+                "type": "object",
+                "properties": {"question": {"type": "string", "description": "The statistics question, complete and self-contained."}},
+                "required": ["question"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "search_laws_of_the_game",
+            "description": "Search the official IFAB Laws of the Game (the rules of football), "
+                           "e.g. offside, fouls, cards, penalties, throw-ins.",
+            "parameters": {
+                "type": "object",
+                "properties": {"query": {"type": "string", "description": "The rules question to search for."}},
+                "required": ["query"],
+            },
+        },
+    },
+]
+
+
+# --- The tools. Each one returns {"content": text for the LLM, plus what the evaluation needs}. ---
+
+def query_stats_database(question: str) -> dict:
+    result = answer_with_sql(question)
+    if result["rows"] is None:
+        content = f"The query failed: {result['error']}"
+    elif result["rows"].empty:
+        content = "The query returned no rows."
+    else:
+        content = result["rows"].to_string(index=False)
+    return {"content": content, "sql": result["sql"], "tokens": result["tokens"], "latency_s": result["latency_s"]}
+
+
+def search_laws_of_the_game(query: str) -> dict:
+    translation = to_search_query(query)  # safety net if the query is not in English
+    passages = retrieve(translation.text)
+    content = "\n\n".join(f"[Law {p['law_number']} – {p['law_title']} – {p['section']}]\n{p['text']}" for p in passages)
+    return {
+        "content": content,
+        "passages": passages,
+        "tokens": translation.input_tokens + translation.output_tokens,
+        "latency_s": translation.latency_s,
+    }
+
+
+TOOL_FUNCTIONS = {
+    "query_stats_database": query_stats_database,
+    "search_laws_of_the_game": search_laws_of_the_game,
+}
+
+
+# --- Messages in the format Ollama expects. ---
+
+def assistant_message(response: LLMResponse) -> dict:
+    """The LLM's turn, to put back in the conversation (with the tool calls it asked for)."""
+    return {
+        "role": "assistant",
+        "content": response.text,
+        "tool_calls": [{"function": {"name": c["name"], "arguments": c["arguments"]}} for c in response.tool_calls],
+    }
+
+
+def tool_message(tool_name: str, content: str) -> dict:
+    """The result of a tool, sent back to the LLM."""
+    return {"role": "tool", "tool_name": tool_name, "content": content}
+
+
+def run_agent(question: str) -> dict:
+    """Answer a question with the tools. Returns
+    {"answer": str, "tools_used": [tool names], "sql": [queries], "passages": [chunks],
+     "tokens": int, "latency_s": float}
+    """
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": question}]
+    result = {"answer": "", "tools_used": [], "sql": [], "passages": [], "tokens": 0, "latency_s": 0.0}
+
+    def count(cost: dict) -> None:
+        result["tokens"] += cost["tokens"]
+        result["latency_s"] += cost["latency_s"]
+
+    for _ in range(MAX_TURNS):
+        response = chat(messages, tools=TOOLS)
+        count({"tokens": response.input_tokens + response.output_tokens, "latency_s": response.latency_s})
+
+        if not response.tool_calls:  # no tool requested: this is the final answer
+            result["answer"] = response.text
+            return result
+
+        messages.append(assistant_message(response))
+        for call in response.tool_calls:
+            name = call["name"]
+            if name not in TOOL_FUNCTIONS:  # small models sometimes invent a tool
+                messages.append(tool_message(name, f"Error: unknown tool '{name}'. Use one of {list(TOOL_FUNCTIONS)}."))
+                continue
+            try:
+                output = TOOL_FUNCTIONS[name](**call["arguments"])
+            except TypeError as e:  # wrong or missing arguments
+                messages.append(tool_message(name, f"Error: wrong arguments for '{name}' ({e})."))
+                continue
+
+            result["tools_used"].append(name)
+            if "sql" in output:
+                result["sql"].append(output["sql"])
+            result["passages"] += output.get("passages", [])
+            count(output)
+            messages.append(tool_message(name, output["content"]))
+
+    # Still asking for tools after MAX_TURNS: one last call without tools forces an answer
+    response = chat(messages)
+    count({"tokens": response.input_tokens + response.output_tokens, "latency_s": response.latency_s})
+    result["answer"] = response.text
+    return result
