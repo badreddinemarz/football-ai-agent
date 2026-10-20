@@ -46,22 +46,38 @@ FORBIDDEN_KEYWORDS = (
 
 # Few-shot examples: they show the habits the notes alone did not teach qwen2.5:7b (only the tables
 # needed, ties, the team_matches view, second yellows). Keep them different from the eval questions.
+# (question, plan, query): the plan is only shown when chain of thought is on (cot=True).
 SQL_EXAMPLES = [
     ("How many shots on target did Harry Kane have at Euro 2024?",
+     "1. Data: shots, JOIN matches for the competition.\n"
+     "2. Filters: competition = 'UEFA Euro', player_nickname ILIKE '%kane%', NOT is_shootout, outcome on target.\n"
+     "3. Result: COUNT(*).",
      "SELECT COUNT(*) AS shots_on_target FROM shots JOIN matches USING (match_id) "
      "WHERE competition = 'UEFA Euro' AND player_nickname ILIKE '%kane%' AND NOT is_shootout "
      "AND outcome IN ('Goal', 'Saved', 'Saved to Post')"),
     ("Which players received the most yellow cards at the 2022 World Cup?",
+     "1. Data: cards, JOIN matches for the competition.\n"
+     "2. Filters: competition = 'FIFA World Cup', card = 'Yellow Card'.\n"
+     "3. Result: yellow cards per player, keeping every player tied at the maximum (not LIMIT 1).",
      "WITH y AS (SELECT player_nickname, COUNT(*) AS yellow_cards FROM cards JOIN matches USING (match_id) "
      "WHERE competition = 'FIFA World Cup' AND card = 'Yellow Card' GROUP BY player_nickname) "
      "SELECT * FROM y WHERE yellow_cards = (SELECT MAX(yellow_cards) FROM y)"),
     ("How many goals did England concede at Euro 2024?",
+     "1. Data: team goals -> the team_matches view (it already has the competition: no JOIN).\n"
+     "2. Filters: competition = 'UEFA Euro', team ILIKE '%england%'.\n"
+     "3. Result: SUM(goals_against).",
      "SELECT SUM(goals_against) AS goals_conceded FROM team_matches "
      "WHERE competition = 'UEFA Euro' AND team ILIKE '%england%'"),
     ("How many red cards did Argentina get at the 2022 World Cup?",
+     "1. Data: cards, JOIN matches for the competition.\n"
+     "2. Filters: competition = 'FIFA World Cup', team = 'Argentina', sendings-off = 'Red Card' or 'Second Yellow'.\n"
+     "3. Result: COUNT(*).",
      "SELECT COUNT(*) AS red_cards FROM cards JOIN matches USING (match_id) "
      "WHERE competition = 'FIFA World Cup' AND team = 'Argentina' AND card IN ('Red Card', 'Second Yellow')"),
 ]
+# Chain of thought for SQL: the LLM first writes a short plan (data, filters, result), then the query.
+# Off by default; SQL_COT=1 turns it on.
+SQL_COT = os.getenv("SQL_COT") == "1"
 
 
 class UnsafeSQLError(ValueError):
@@ -114,28 +130,47 @@ def clean_sql(text: str) -> str:
     return re.sub(r"^```(?:sql)?|```$", "", text.strip(), flags=re.IGNORECASE).strip()
 
 
-def answer_with_sql(question: str, max_attempts: int = 2) -> dict:
+def extract_sql(text: str) -> str:
+    """The query in the LLM's answer: with a plan (chain of thought), it is what follows the last 'SQL:'."""
+    if "SQL:" in text:
+        text = text.rsplit("SQL:", 1)[1]
+    return clean_sql(text)
+
+
+def answer_with_sql(question: str, max_attempts: int = 2, cot: bool | None = None) -> dict:
     """The LLM writes a query and we run it. If it fails, the error goes back to the LLM for a new try.
 
     max_attempts=1 means no self-correction (used to measure what the second attempt brings).
+    cot: chain of thought, the LLM writes a plan before the query (default: SQL_COT).
     Returns {"sql", "rows" (DataFrame, or None if every attempt failed), "error", "attempts", "tokens", "latency_s"}.
     """
+    cot = SQL_COT if cot is None else cot
+    if cot:
+        output_format = ("First write a short plan: 1. Data (which table or view), 2. Filters, 3. Result. "
+                         "Then write 'SQL:' followed by the query, no markdown.")
+    else:
+        output_format = "Answer with the SQL query only, no explanation, no markdown."
     system = (
         "You translate football questions into ONE DuckDB SQL query.\n"
         f"{schema_description()}\n"
-        "Answer with the SQL query only, no explanation, no markdown. JOIN only the tables you need."
+        f"{output_format} JOIN only the tables you need."
     )
     messages = [{"role": "system", "content": system}]
-    for example_question, example_sql in SQL_EXAMPLES:
-        messages += [{"role": "user", "content": example_question}, {"role": "assistant", "content": example_sql}]
+    for example_question, plan, example_sql in SQL_EXAMPLES:
+        example_answer = f"{plan}\nSQL: {example_sql}" if cot else example_sql
+        messages += [{"role": "user", "content": example_question}, {"role": "assistant", "content": example_answer}]
     messages.append({"role": "user", "content": question})
     tokens, latency = 0, 0.0
     for attempt in range(1, max_attempts + 1):
         response = chat(messages, model=SQL_MODEL)
         tokens += response.input_tokens + response.output_tokens
         latency += response.latency_s
-        query = clean_sql(response.text)
+        query = extract_sql(response.text)
         try:
+            # Without FROM, the "result" is whatever the LLM typed, e.g. SELECT 'my own answer':
+            # Claude Haiku did that for rules questions. The answer must come from the data.
+            if not re.search(r"\bFROM\b", query, flags=re.IGNORECASE):
+                raise UnsafeSQLError("The query must read from the database tables (no FROM clause).")
             rows = run_sql(query)
             return {"sql": query, "rows": rows, "error": None, "attempts": attempt, "tokens": tokens, "latency_s": latency}
         except (UnsafeSQLError, duckdb.Error) as e:

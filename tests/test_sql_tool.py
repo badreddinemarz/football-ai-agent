@@ -33,3 +33,14 @@ def test_strips_trailing_semicolon():
 def test_rejects_unsafe_queries(query):
     with pytest.raises(UnsafeSQLError):
         validate_sql(query)
+
+
+def test_extract_sql_after_a_plan():
+    from src.sql_tool import extract_sql
+    text = "1. Data: goal_events\n2. Filters: ...\n3. Result: COUNT(*)\nSQL: SELECT COUNT(*) FROM goal_events"
+    assert extract_sql(text) == "SELECT COUNT(*) FROM goal_events"
+
+
+def test_extract_sql_without_a_plan():
+    from src.sql_tool import extract_sql
+    assert extract_sql("```sql\nSELECT 1 FROM matches\n```") == "SELECT 1 FROM matches"

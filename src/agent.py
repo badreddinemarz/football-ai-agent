@@ -106,10 +106,10 @@ def tool_message(tool_name: str, content: str) -> dict:
 def run_agent(question: str) -> dict:
     """Answer a question with the tools. Returns
     {"answer": str, "tools_used": [tool names], "sql": [queries], "passages": [chunks],
-     "tokens": int, "latency_s": float}
+     "contexts": [what each tool returned to the LLM], "tokens": int, "latency_s": float}
     """
     messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": question}]
-    result = {"answer": "", "tools_used": [], "sql": [], "passages": [], "tokens": 0, "latency_s": 0.0}
+    result = {"answer": "", "tools_used": [], "sql": [], "passages": [], "contexts": [], "tokens": 0, "latency_s": 0.0}
 
     def count(cost: dict) -> None:
         result["tokens"] += cost["tokens"]
@@ -140,6 +140,7 @@ def run_agent(question: str) -> dict:
                 result["sql"].append(output["sql"])
             result["passages"] += output.get("passages", [])
             count(output)
+            result["contexts"].append(output["content"])  # kept to check the answer's faithfulness
             messages.append(tool_message(name, output["content"]))
 
     # Still asking for tools after MAX_TURNS: one last call without tools forces an answer

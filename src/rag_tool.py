@@ -19,7 +19,10 @@ COLLECTION = "laws"
 # (5/10), multilingual-e5-small (7/10) and bge-m3 (7/10, much slower): 8/10 right passages in the top 5.
 EMBEDDING_MODEL = "intfloat/multilingual-e5-base"
 LAW_PAGES = (44, 150)  # Laws 1 to 17 in the English 2026/27 PDF (page numbers as printed, inclusive)
-MAX_WORDS = 400
+# The embedding model reads at most 512 tokens and silently cuts the rest. English legal text is about
+# 1.46 tokens per word: 400 words went over for 19 of 103 chunks, 300 words (+ the titles) stays under.
+# build_index.py checks it with count_tokens().
+MAX_WORDS = 300
 OVERLAP_WORDS = 50
 # A page header (sometimes glued to the page number) or a line holding only a page number
 PAGE_NOISE = r"^\d*Laws of the Game \d{4}/\d{2}\s*\|.*$|^\s*\d+\s*$"
@@ -105,6 +108,11 @@ def embed(texts: list[str], kind: str) -> list[list[float]]:
     e5 models were trained with a prefix telling questions ("query") from documents ("passage").
     """
     return embedding_model().encode([f"{kind}: {t}" for t in texts], normalize_embeddings=True).tolist()
+
+
+def count_tokens(text: str, kind: str = "passage") -> int:
+    """How many tokens the embedding model sees for this text (with its prefix)."""
+    return len(embedding_model().tokenizer(f"{kind}: {text}")["input_ids"])
 
 
 def text_to_embed(chunk: dict) -> str:

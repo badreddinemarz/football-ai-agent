@@ -19,6 +19,12 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 MODEL = os.getenv("LLM_MODEL", "qwen2.5:7b")
 
+# Claude API prices in $ per million tokens (input, output), for prompts under 100K tokens.
+# Unknown models are counted at a high price, so the budget check stays on the safe side.
+PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)}
+DEFAULT_PRICE = (10.00, 50.00)
+spent_usd = 0.0  # what the Claude calls of this process have cost so far (Ollama is free)
+
 
 @dataclass
 class LLMResponse:
@@ -33,13 +39,14 @@ class LLMResponse:
 
 
 def chat(messages: list[dict], tools: list[dict] | None = None, temperature: float = 0.0,
-         model: str | None = None) -> LLMResponse:
+         model: str | None = None, effort: str | None = None) -> LLMResponse:
     """Send a conversation to the LLM. temperature=0 makes the local evaluation reproducible.
-    model: to use another model than MODEL for this call (e.g. a different model for SQL)."""
+    model: to use another model than MODEL for this call (e.g. a different model for SQL).
+    effort: Claude only, "low" / "medium" / "high": how much the model thinks (and costs)."""
     model = model or MODEL
     start = time.perf_counter()
     if model.startswith("claude-"):
-        response = _chat_claude(model, messages, tools)
+        response = _chat_claude(model, messages, tools, effort)
     else:
         response = _chat_ollama(model, messages, tools, temperature)
     response.latency_s = time.perf_counter() - start
@@ -64,9 +71,10 @@ def _claude_client() -> anthropic.Anthropic:
     return anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
 
 
-def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None) -> LLMResponse:
+def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None, effort: str | None) -> LLMResponse:
+    global spent_usd
     system, history = _to_claude_messages(messages)
-    options = {}
+    options = {"output_config": {"effort": effort}} if effort else {}
     if system:
         options["system"] = system
     if tools:
@@ -75,6 +83,8 @@ def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None) -> 
     # No temperature: Claude Haiku 5.5 rejects non-default sampling parameters.
     # Thinking is left on (adaptive, the default): the model thinks before hard queries.
     response = _claude_client().messages.create(model=model, max_tokens=16000, messages=history, **options)
+    price_in, price_out = PRICES.get(model, DEFAULT_PRICE)
+    spent_usd += (response.usage.input_tokens * price_in + response.usage.output_tokens * price_out) / 1_000_000
     return LLMResponse(
         text="".join(b.text for b in response.content if b.type == "text"),
         tool_calls=[{"name": b.name, "arguments": b.input} for b in response.content if b.type == "tool_use"],
