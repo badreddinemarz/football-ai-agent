@@ -78,7 +78,15 @@ def agent(question: str) -> dict:
             "context": "\n\n".join(r["contexts"]), "sql": r["sql"], "tokens": r["tokens"], "latency_s": r["latency_s"]}
 
 
-CONFIGS = {"A_llm_only": llm_only, "B_rag_only": rag_only, "C_sql_only": sql_only, "D_agent": agent}
+def langgraph_agent(question: str) -> dict:
+    from src.agent_langgraph import run_agent as run_langgraph  # imported here: LangGraph is only needed for E
+    r = run_langgraph(question)
+    return {"answer": r["answer"], "tools_used": r["tools_used"], "passages": r["passages"],
+            "context": "\n\n".join(r["contexts"]), "sql": r["sql"], "tokens": r["tokens"], "latency_s": r["latency_s"]}
+
+
+CONFIGS = {"A_llm_only": llm_only, "B_rag_only": rag_only, "C_sql_only": sql_only, "D_agent": agent,
+           "E_langgraph": langgraph_agent}
 
 
 # --- The LLM judge ---
@@ -121,7 +129,7 @@ def judge(prompt: str, model: str) -> dict:
 def grade(q: dict, run: dict) -> dict:
     """All the metrics for one answer."""
     grades = {"recall_at_5": recall_at_k(run["passages"], q["expected_laws"])}
-    if run["config"] == "D_agent":
+    if run["config"] in ("D_agent", "E_langgraph"):
         grades["right_tools"] = right_tools(run["tools_used"], q["expected_tools"])
 
     checks = []

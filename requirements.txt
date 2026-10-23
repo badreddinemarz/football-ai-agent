@@ -12,3 +12,6 @@ anthropic
 fastapi
 uvicorn
 httpx
+langgraph
+langchain-anthropic
+langchain-ollama

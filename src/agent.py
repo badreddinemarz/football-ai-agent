@@ -11,6 +11,8 @@ from src.rag_tool import retrieve, to_search_query
 from src.sql_tool import answer_with_sql
 
 MAX_TURNS = 3
+# When the forced last answer comes back with no text (only the model's thinking): never answer "".
+NO_ANSWER = "I could not find a reliable answer to this question in my tools."
 
 SYSTEM_PROMPT = (
     "You are a football assistant with two tools:\n"
@@ -161,5 +163,5 @@ def run_agent(question: str) -> dict:
     # Still asking for tools after MAX_TURNS: one last call where tools are forbidden forces an answer
     response = chat(messages, tools=TOOLS, tools_allowed=False)
     count({"tokens": response.input_tokens + response.output_tokens, "latency_s": response.latency_s})
-    result["answer"] = response.text
+    result["answer"] = response.text or NO_ANSWER
     return result
