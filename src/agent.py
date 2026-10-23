@@ -4,6 +4,8 @@ Small local models call tools badly: they may answer without a tool, invent a to
 wrong arguments. The loop must survive all of that and always return an answer.
 """
 
+import os
+
 from src.llm import LLMResponse, chat
 from src.rag_tool import retrieve, to_search_query
 from src.sql_tool import answer_with_sql
@@ -23,6 +25,19 @@ SYSTEM_PROMPT = (
     "3. If the question is about neither topic, say that you can only help with these two topics.\n"
     "Answer in English, in a few sentences."
 )
+
+# Agentic retrieval: the agent judges the passages it received and, when they do not answer, searches
+# again with other words instead of answering "I could not find it". AGENTIC_SEARCH=0 turns it off.
+AGENTIC_SEARCH = os.getenv("AGENTIC_SEARCH", "1") == "1"
+SEARCH_AGAIN_RULE = (
+    "\nBefore answering a rules question, check that the passages you received really contain the answer. "
+    "If they do not, call search_laws_of_the_game again with a different query, written with the official "
+    "vocabulary of the Laws of the Game rather than everyday words."
+)
+
+
+def system_prompt() -> str:
+    return SYSTEM_PROMPT + (SEARCH_AGAIN_RULE if AGENTIC_SEARCH else "")
 
 TOOLS = [
     {
@@ -108,7 +123,7 @@ def run_agent(question: str) -> dict:
     {"answer": str, "tools_used": [tool names], "sql": [queries], "passages": [chunks],
      "contexts": [what each tool returned to the LLM], "tokens": int, "latency_s": float}
     """
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": question}]
+    messages = [{"role": "system", "content": system_prompt()}, {"role": "user", "content": question}]
     result = {"answer": "", "tools_used": [], "sql": [], "passages": [], "contexts": [], "tokens": 0, "latency_s": 0.0}
 
     def count(cost: dict) -> None:
@@ -143,8 +158,8 @@ def run_agent(question: str) -> dict:
             result["contexts"].append(output["content"])  # kept to check the answer's faithfulness
             messages.append(tool_message(name, output["content"]))
 
-    # Still asking for tools after MAX_TURNS: one last call without tools forces an answer
-    response = chat(messages)
+    # Still asking for tools after MAX_TURNS: one last call where tools are forbidden forces an answer
+    response = chat(messages, tools=TOOLS, tools_allowed=False)
     count({"tokens": response.input_tokens + response.output_tokens, "latency_s": response.latency_s})
     result["answer"] = response.text
     return result

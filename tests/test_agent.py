@@ -13,8 +13,8 @@ class FakeLLM:
         self.responses = list(responses)
         self.calls = []  # (messages, tools) for each call
 
-    def __call__(self, messages, tools=None, temperature=0.0):
-        self.calls.append(([dict(m) for m in messages], tools))
+    def __call__(self, messages, tools=None, temperature=0.0, tools_allowed=True):
+        self.calls.append(([dict(m) for m in messages], tools if tools_allowed else None))  # None: no tool usable
         return self.responses.pop(0)
 
 

@@ -154,14 +154,15 @@ def save_spent() -> None:
     llm.spent_usd = 0.0  # now counted in the file
 
 
-def evaluate(model: str, configs: list[str], budget: float, sample: int | None) -> None:
+def evaluate(model: str, configs: list[str], budget: float, sample: int | None, tag: str | None = None) -> None:
     llm.MODEL = model  # every chat() call without an explicit model now uses this one
+    label = f"{model}@{tag}" if tag else model  # a tag keeps a new version's runs apart from the old ones
     questions = [json.loads(line) for line in QUESTIONS.open(encoding="utf-8")]
     if sample:  # evenly spread, so every category is represented
         questions = questions[::max(1, len(questions) // sample)][:sample]
     errors_in_a_row = 0
     for config in configs:
-        folder = RUNS / model.replace(":", "_") / config
+        folder = RUNS / label.replace(":", "_") / config
         folder.mkdir(parents=True, exist_ok=True)
         for i, q in enumerate(questions, 1):
             if total_spent() >= budget:
@@ -175,7 +176,7 @@ def evaluate(model: str, configs: list[str], budget: float, sample: int | None) 
             try:
                 if run is None:
                     run = CONFIGS[config](q["question"])
-                    run.update(id=q["id"], category=q["category"], config=config, model=model)
+                    run.update(id=q["id"], category=q["category"], config=config, model=label)
                     path.write_text(json.dumps(run, ensure_ascii=False, indent=1), encoding="utf-8")
                 if "grades" not in run:
                     run["grades"] = grade(q, run)
@@ -190,7 +191,7 @@ def evaluate(model: str, configs: list[str], budget: float, sample: int | None) 
                     return
                 continue
             save_spent()
-            print(f"{model} {config} {i}/{len(questions)} {q['id']}: "
+            print(f"{label} {config} {i}/{len(questions)} {q['id']}: "
                   f"{'OK' if run['grades']['correct'] else 'KO'} ({run['latency_s']:.0f} s) "
                   f"| spent so far: {total_spent():.3f} $", flush=True)
 
@@ -240,12 +241,13 @@ def main() -> None:
     parser.add_argument("--configs", nargs="+", default=list(CONFIGS), choices=list(CONFIGS))
     parser.add_argument("--budget", type=float, default=2.50, help="stop before spending more $ on the Claude API")
     parser.add_argument("--sample", type=int, help="only this many questions (spread over the categories)")
+    parser.add_argument("--tag", help="name of a code version, e.g. agentic: its runs are kept apart")
     parser.add_argument("--report", action="store_true", help="only rewrite results.md")
     args = parser.parse_args()
     if not args.report:
         if not args.model:
             parser.error("--model is required (or use --report)")
-        evaluate(args.model, args.configs, args.budget, args.sample)
+        evaluate(args.model, args.configs, args.budget, args.sample, args.tag)
     write_report()
 
 

@@ -23,7 +23,8 @@ SCHEMA_NOTES = """
     result 'win'/'draw'/'loss' (knockout draws decided by the shoot-out). Team goals, wins, winners: use it.
     Tournament winner: stage = 'Final' AND result = 'win'.
 - competition: 'FIFA World Cup' (2022) or 'UEFA Euro' (2024). Base tables: JOIN matches USING (match_id).
-- Filter names with ILIKE on a short part of the name: player_nickname ILIKE '%<name>%'; teams in English
+- Filter names on a short part of the name, ignoring accents (users type 'Mbappe' for 'Mbappé'):
+  strip_accents(player_nickname) ILIKE strip_accents('%<name>%'); teams in English
   (e.g. 'South Korea', 'Turkey').
 - On `shots`, shoot-out kicks (is_shootout = TRUE) are NEVER goals or shots: add AND NOT is_shootout.
   In-match penalties: shot_type = 'Penalty' (scored: AND is_goal). player_match_stats already excludes shoot-outs.
@@ -50,10 +51,10 @@ FORBIDDEN_KEYWORDS = (
 SQL_EXAMPLES = [
     ("How many shots on target did Harry Kane have at Euro 2024?",
      "1. Data: shots, JOIN matches for the competition.\n"
-     "2. Filters: competition = 'UEFA Euro', player_nickname ILIKE '%kane%', NOT is_shootout, outcome on target.\n"
+     "2. Filters: competition = 'UEFA Euro', name without accents ILIKE '%kane%', NOT is_shootout, outcome on target.\n"
      "3. Result: COUNT(*).",
      "SELECT COUNT(*) AS shots_on_target FROM shots JOIN matches USING (match_id) "
-     "WHERE competition = 'UEFA Euro' AND player_nickname ILIKE '%kane%' AND NOT is_shootout "
+     "WHERE competition = 'UEFA Euro' AND strip_accents(player_nickname) ILIKE strip_accents('%kane%') AND NOT is_shootout "
      "AND outcome IN ('Goal', 'Saved', 'Saved to Post')"),
     ("Which players received the most yellow cards at the 2022 World Cup?",
      "1. Data: cards, JOIN matches for the competition.\n"

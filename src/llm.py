@@ -39,16 +39,18 @@ class LLMResponse:
 
 
 def chat(messages: list[dict], tools: list[dict] | None = None, temperature: float = 0.0,
-         model: str | None = None, effort: str | None = None) -> LLMResponse:
+         model: str | None = None, effort: str | None = None, tools_allowed: bool = True) -> LLMResponse:
     """Send a conversation to the LLM. temperature=0 makes the local evaluation reproducible.
     model: to use another model than MODEL for this call (e.g. a different model for SQL).
-    effort: Claude only, "low" / "medium" / "high": how much the model thinks (and costs)."""
+    effort: Claude only, "low" / "medium" / "high": how much the model thinks (and costs).
+    tools_allowed=False: the tools stay described but the model must answer in text. (Claude ties its
+    thinking blocks to the tool list: removing the tools mid-conversation makes the API refuse the call.)"""
     model = model or MODEL
     start = time.perf_counter()
     if model.startswith("claude-"):
-        response = _chat_claude(model, messages, tools, effort)
+        response = _chat_claude(model, messages, tools, effort, tools_allowed)
     else:
-        response = _chat_ollama(model, messages, tools, temperature)
+        response = _chat_ollama(model, messages, tools if tools_allowed else None, temperature)
     response.latency_s = time.perf_counter() - start
     return response
 
@@ -71,7 +73,8 @@ def _claude_client() -> anthropic.Anthropic:
     return anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
 
 
-def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None, effort: str | None) -> LLMResponse:
+def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None, effort: str | None,
+                 tools_allowed: bool = True) -> LLMResponse:
     global spent_usd
     system, history = _to_claude_messages(messages)
     options = {"output_config": {"effort": effort}} if effort else {}
@@ -80,6 +83,8 @@ def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None, eff
     if tools:
         options["tools"] = [{"name": t["function"]["name"], "description": t["function"]["description"],
                              "input_schema": t["function"]["parameters"]} for t in tools]
+        if not tools_allowed:
+            options["tool_choice"] = {"type": "none"}
     # No temperature: Claude Haiku 5.5 rejects non-default sampling parameters.
     # Thinking is left on (adaptive, the default): the model thinks before hard queries.
     response = _claude_client().messages.create(model=model, max_tokens=16000, messages=history, **options)

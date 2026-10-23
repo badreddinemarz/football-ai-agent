@@ -1,0 +1,358 @@
+{
+ "baseline": [
+  {
+   "id": "h01",
+   "found": true,
+   "searches": 1,
+   "latency_s": 6.3,
+   "cost_usd": 0.0007646,
+   "answer": "No, not if he handles it inside his penalty area. Under the IFAB rules, a goalkeeper inside their penalty area who touches the ball with the hand or arm after receiving it directly from a teammate's throw-in commits an offence, and an indirect free kick is awarded (Law 12). The passages I found don't cover the goalkeeper touching a throw-in outside the penalty area, so I can't confirm the rule there."
+  },
+  {
+   "id": "h02",
+   "found": true,
+   "searches": 1,
+   "latency_s": 7.5,
+   "cost_usd": 0.0005338999999999999,
+   "answer": "In official competitions, a team can use up to five substitutes, but the exact number is set by FIFA, the confederation, or the national association. For top-division and senior international matches where five are permitted, each team has three substitution opportunities plus an additional opportunity at half-time. Multiple substitutions during the same stoppage count as one opportunity (Law 3)."
+  },
+  {
+   "id": "h03",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.7,
+   "cost_usd": 0.0007283000000000001,
+   "answer": "Yes, within limits. Law 4 permits non-dangerous protective headgear made of soft, lightweight padded material, and goalkeepers may wear caps. Other head covers must be black or the same main colour as the shirt (with all of a team's players in the same colour), must suit the professional appearance of the equipment, must not be attached to the shirt, and must not be dangerous, such as having a neck opening or closing mechanism. They also cannot have protruding elements (Law 4). Any item that breaks these conditions must be removed when the referee orders it, and a player who refuses or wears it again is cautioned (Law 4)."
+  },
+  {
+   "id": "h04",
+   "found": true,
+   "searches": 1,
+   "latency_s": 7.8,
+   "cost_usd": 0.0004681999999999998,
+   "answer": "The ball must be spherical and have a circumference of between 68 cm (27 in) and 70 cm (28 in). At the start of the match it must weigh between 410 g (14 oz) and 450 g (16 oz), with a pressure of 0.6–1.1 atmosphere at sea level (Law 2). Balls used in FIFA-organised or confederation competitions must also bear an official FIFA Quality Programme mark."
+  },
+  {
+   "id": "h05",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.4,
+   "cost_usd": 0.0005273999999999999,
+   "answer": "The referee decides the stoppage time. Under Law 7, the referee allows additional time in each half for all playing time lost, such as substitutions, injury assessments, wasting time, disciplinary sanctions, VAR checks and reviews, goal celebrations, and any significant delay to a restart. The fourth official shows the minimum added time at the end of the final minute of each half, but the referee can increase that amount, not reduce it (Law 7). The referee's decisions on match facts are final, and the referee uses discretion within the Laws (Law 5)."
+  },
+  {
+   "id": "h06",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.6,
+   "cost_usd": 0.0005802999999999997,
+   "answer": "The laws passages I retrieved don't describe a specific flag signal for the ball going out. They say the assistant referee indicates when the whole ball leaves the field of play and which team is entitled to a corner kick, goal kick or throw-in (Law 6). The exact signal is not specified in what I found, so I can't tell you the gesture itself."
+  },
+  {
+   "id": "h07",
+   "found": true,
+   "searches": 1,
+   "latency_s": 7.7,
+   "cost_usd": 0.0006578,
+   "answer": "No. Under Law 14, once a penalty kick is in play the kicker may not touch the ball again before it has touched another player. If he does, the defending team is awarded an indirect free kick. This applies to a rebound off the post or crossbar just as it does to any other touch, so he cannot simply score from his own rebound. The passage I received is an excerpt, so I can only cite the part of Law 14 about the kicker touching the ball again."
+  },
+  {
+   "id": "h08",
+   "found": true,
+   "searches": 1,
+   "latency_s": 3.9,
+   "cost_usd": 0.0005440000000000002,
+   "answer": "Yes, a goal can be scored directly from a goal kick, but only into the opponents' goal. If the ball goes directly into the kicker's own goal, the opponents are awarded a corner kick, not a goal (Law 16)."
+  },
+  {
+   "id": "h09",
+   "found": true,
+   "searches": 1,
+   "latency_s": 3.5,
+   "cost_usd": 0.0005504000000000004,
+   "answer": "A goal is restarted with a kick-off, taken by the team that conceded the goal (Law 8). The ball must be stationary on the centre mark, the referee gives the signal, and all players except the kicker must be in their own half. The opposing team must be at least 9.15 m (10 yds) from the ball until it is in play. A goal can be scored directly from this kick-off, and if the ball goes straight into the kicker's own goal, a corner kick is awarded to the opponents."
+  },
+  {
+   "id": "h10",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.2,
+   "cost_usd": 0.0007541000000000006,
+   "answer": "Spitting at an opponent is listed in Law 12 under \"physical or aggressive behaviour (including spitting or biting) towards an opposing player,\" among the disciplinary offences (Law 12, Disciplinary action). The excerpt I received doesn't show the heading of that list, but it sits alongside offences such as receiving a second caution and violent conduct, which are sending-off offences. In the standard Laws, spitting at an opponent is a sending-off offence, so the player would be sent off. I can't confirm the exact wording of that heading from the passage alone, though."
+  },
+  {
+   "id": "h11",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.3,
+   "cost_usd": 0.0006718000000000002,
+   "answer": "If the ball becomes defective during play, the referee stops play and restarts it with a dropped ball (Law 2). If the ball bursts during a restart such as a kick-off, goal kick, corner kick, free kick, penalty kick or throw-in, that restart is retaken instead. For a penalty kick, it is retaken if the ball becomes defective as it moves forward and before it touches a player, the crossbar or the goalposts. The ball cannot be swapped during the match without the referee's permission (Law 2)."
+  },
+  {
+   "id": "h12",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.4,
+   "cost_usd": 0.0005292999999999999,
+   "answer": "No, being level with the last defender does not make a player offside. Under Law 11, a player is in an offside position only if they are nearer to the opponents' goal line than both the ball and the second-last opponent. The law states that a player is not in an offside position if level with the second-last opponent or the last two opponents (Law 11). Being in an offside position is also not an offence in itself; the player must become involved in active play to be penalised (Law 11)."
+  },
+  {
+   "id": "h13",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.4,
+   "cost_usd": 0.0007454000000000011,
+   "answer": "A dropped ball goes to the goalkeeper only when play was stopped with the ball inside the penalty area: the referee then drops it for the defending team's goalkeeper, inside their own penalty area (Law 8). If the ball was outside the penalty area, it is dropped for a player of the team that would have retained or gained possession, or for a player of the team that last touched it if that cannot be determined. Other players must stay at least 4 m from the ball until it is in play."
+  },
+  {
+   "id": "h14",
+   "found": false,
+   "searches": 1,
+   "latency_s": 5.8,
+   "cost_usd": 0.0007691,
+   "answer": "No, defenders should not remain in the penalty area when a goal kick is taken. Law 16 says that if opponents are inside the penalty area because they did not have time to leave, the referee lets play continue. If an opponent in the area when the kick is taken, or one who enters it before the ball is in play, touches or challenges for the ball before it is in play, the goal kick is retaken. The passages I retrieved don't state a direct sanction for simply standing in the box, so the consequence is a retake only if they interfere with the ball."
+  },
+  {
+   "id": "h15",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.5,
+   "cost_usd": 0.0007241000000000001,
+   "answer": "Yes. Under the Laws of the Game, a coach is a team official, and team officials can be shown yellow cards as well as red cards. The yellow card communicates a caution, and a team official who commits a cautionable offence is disciplined accordingly (Law 12). Caution offences for team officials include dissent by word or action, persistently not respecting the technical area, and delaying the restart of play. If a coach commits a sending-off offence, they receive a red card instead (Law 12). Where an offence can't be traced to a specific person in the technical area, the senior coach present receives the sanction (Law 12)."
+  },
+  {
+   "id": "h16",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.0,
+   "cost_usd": 0.0005950999999999994,
+   "answer": "The referee keeps the time. Under Law 5, the referee acts as timekeeper and also keeps the match record. The referee decides how much time to add at the end of each half for time lost to substitutions, injuries, wasting time, VAR checks, goal celebrations and similar causes (Law 7). The fourth official shows the minimum added time, which the referee can increase but not reduce. If a penalty kick has to be taken or retaken, the half is extended until it is completed (Law 7)."
+  },
+  {
+   "id": "h17",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.7,
+   "cost_usd": 0.0006944000000000013,
+   "answer": "The Laws don't mention weather by name. Law 5 does give the referee power to \"stop, suspend or abandon the match\" for outside interference, with inadequate floodlights as one example. Whether conditions such as rain, lightning or fog justify stopping or abandoning a match is therefore left to the referee's judgement under that power (Law 5). The Laws don't set out a specific weather threshold, so any decision to call off a game for weather would depend on the referee and on the competition's own rules."
+  },
+  {
+   "id": "h18",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.8,
+   "cost_usd": 0.0005756000000000008,
+   "answer": "The fourth official assists the referee in several ways. Their listed duties include supervising the substitution procedure, checking players' and substitutes' equipment, and controlling the re-entry of a player once the referee has signalled or approved it. They also supervise the replacement balls, indicate the minimum additional time the referee intends to play at the end of each half (including extra time), and inform the referee of any irresponsible behaviour by technical area occupants (Law 6). The fourth official works under the referee's direction, and the referee makes all final decisions. They can also replace an assistant referee or another official who is unable to continue, and a reserve assistant referee may take that role (Law 6)."
+  },
+  {
+   "id": "h19",
+   "found": true,
+   "searches": 1,
+   "latency_s": 6.0,
+   "cost_usd": 0.0007903000000000007,
+   "answer": "The passages I retrieved don't state the exact moment a free kick becomes live, so I can't give you that wording with confidence. They do say that opponents must stay at least 1 m (1 yd) from the wall until the ball is in play (Law 13). They also say that if an opponent in the penalty area, or one who enters it before the ball is in play, touches or challenges for the ball, the free kick is retaken (Law 13). And if the kicker touches the ball again before another player has touched it, an indirect free kick is awarded (Law 13). A narrower search of Law 13 on the kick-taking procedure should give the precise trigger."
+  },
+  {
+   "id": "h20",
+   "found": false,
+   "searches": 1,
+   "latency_s": 5.3,
+   "cost_usd": 0.0007036000000000004,
+   "answer": "Yes, in some situations, but the passages I retrieved don't contain the specific time limit for a goalkeeper holding the ball, so I can't give you that rule from the source. What they do cover is that a goalkeeper who handles the ball in their penalty area when not permitted to is awarded an indirect free kick (Law 12). For goal kicks, if a player unfairly delays the restart, the referee starts a five-second countdown, and if the kick isn't taken in time, a corner kick goes to the opposing team (Law 16). If you need the exact time limit for a goalkeeper holding the ball, I'd suggest checking the full text of the Laws of the Game."
+  },
+  {
+   "id": "h21",
+   "found": true,
+   "searches": 1,
+   "latency_s": 6.7,
+   "cost_usd": 0.0006510000000000005,
+   "answer": "The laws don't mention casts or braces by name, so this is an inference from the general equipment rules. Law 4 bans dangerous equipment, and dangerous items must be removed, not taped or covered. It permits non-dangerous protective equipment, such as knee and arm protectors made of soft, lightweight padded material. A rigid cast would likely count as dangerous, so it probably couldn't be worn. A soft, padded brace could be allowed if it is not dangerous, and the referee makes that call at the inspection before the match. If equipment is found to be unauthorised, the referee can order the player to remove it, and a player who refuses or puts it back on can be cautioned (Law 4)."
+  },
+  {
+   "id": "h22",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.3,
+   "cost_usd": 0.0006394999999999994,
+   "answer": "The Laws of the Game don't set a single fixed number of bench places. Competition rules decide how many substitutes can be named, and the IFAB text says this is \"from three to a maximum of fifteen\" (Law 3). In senior \"A\" international matches, up to fifteen substitutes may be named, of which a maximum of eight may be used unless both teams agree otherwise (Law 3). The number of people allowed in the technical area is also set by competition rules (Law 1). For the exact figure in a specific tournament, such as the 2022 World Cup or Euro 2024, the competition's own regulations would need to be checked."
+  }
+ ],
+ "agentic": [
+  {
+   "id": "h01",
+   "found": true,
+   "searches": 2,
+   "latency_s": 9.6,
+   "cost_usd": 0.0016082000000000006,
+   "answer": "No, not inside his penalty area. If the goalkeeper receives a throw-in directly from a teammate and then touches the ball with his hand or arm inside his own penalty area, an indirect free kick is awarded to the opponents. The exception is when he has clearly kicked the ball, or attempted to kick it, to release it into play (Law 12). The same restriction applies if a teammate deliberately kicks the ball to him. The passage I received does not say what happens when the offence occurs outside the penalty area, so I can't confirm that from the Laws text I have."
+  },
+  {
+   "id": "h02",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.2,
+   "cost_usd": 0.0007016999999999995,
+   "answer": "In a normal match in an official competition, a team can use up to five substitutes, but in top-division and senior international matches the limit is three substitution opportunities, plus any substitutions at half-time. Several substitutions made in the same stoppage count as one opportunity, and unused substitutes and opportunities can carry into extra time (Law 3). The competition's own rules set the exact number, so check the specific tournament's regulations if you need that detail."
+  },
+  {
+   "id": "h03",
+   "found": true,
+   "searches": 1,
+   "latency_s": 11.4,
+   "cost_usd": 0.0007400000000000011,
+   "answer": "Yes, with conditions. Players may wear non-dangerous protective headgear made of soft, lightweight padded material, and goalkeepers may wear caps and sports spectacles (Law 4). Other head covers must be black or the same main colour as the shirt (with teammates in the same colour), must not be attached to the shirt, must not be dangerous (for example, no opening or closing mechanism around the neck), and must not have protruding parts. If a player wears unauthorised or dangerous equipment, the referee must order it removed, and a player who refuses or wears it again must be cautioned (Law 4)."
+  },
+  {
+   "id": "h04",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.1,
+   "cost_usd": 0.0006291999999999999,
+   "answer": "The ball must have a circumference of between 68 cm (27 in) and 70 cm (28 in) (Law 2). It must also weigh between 410 g and 450 g at the start of the match, and have a pressure of 0.6 to 1.1 atmosphere at sea level. Balls used in FIFA-organised or confederation competitions must also carry one of the FIFA Quality Programme marks (Law 2)."
+  },
+  {
+   "id": "h05",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.5,
+   "cost_usd": 0.0005765000000000006,
+   "answer": "The referee decides the stoppage time. Under Law 7, the referee makes an allowance in each half for all playing time lost, such as substitutions, injury assessments, wasting time, disciplinary sanctions, VAR checks and reviews, and goal celebrations. The fourth official shows the minimum additional time at the end of the final minute of each half, but the referee can increase that amount and cannot reduce it. (Law 7; Law 6)"
+  },
+  {
+   "id": "h06",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.7,
+   "cost_usd": 0.000616499999999999,
+   "answer": "The Laws say that assistant referees indicate when the whole of the ball leaves the field of play and which team is entitled to a corner kick, goal kick or throw-in (Law 6). The approved signals are shown in graphics that the text I received doesn't describe, so I can't tell you the exact gesture. The passages do confirm that the signal shows the restart: a corner kick, a goal kick, or a throw-in for the defending or attacking team."
+  },
+  {
+   "id": "h07",
+   "found": true,
+   "searches": 1,
+   "latency_s": 7.3,
+   "cost_usd": 0.0009873999999999994,
+   "answer": "**No.** The kicker may not play the ball again until it has touched another player (Law 14). A rebound off the post or crossbar does not count as touching another player, so the kicker cannot score from his own rebound. He has to wait for a goalkeeper, a defender, an attacker or any other player to touch the ball first. The passages I received don't spell out the exact sanction for a kicker who plays the ball again, so I can't confirm that from the Laws here."
+  },
+  {
+   "id": "h08",
+   "found": true,
+   "searches": 1,
+   "latency_s": 8.4,
+   "cost_usd": 0.0008488999999999997,
+   "answer": "No, a goalkeeper cannot score an own goal from his own goal kick. Under Law 16, a goal can be scored directly from a goal kick only against the opposing team. If the ball goes directly into the kicker's own goal, no goal is scored and a corner kick is awarded to the opponents."
+  },
+  {
+   "id": "h09",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.5,
+   "cost_usd": 0.0005852999999999969,
+   "answer": "After a goal, play restarts with a **kick-off** (Law 8). The team that conceded the goal takes the kick-off, from the centre mark. Under the kick-off procedure, all players except the taker must be in their own half, and the opponents must be at least 9.15 m (10 yards) from the ball until it is in play. The ball is in play once it is kicked and clearly moves. A goal can be scored directly from a kick-off, but if the ball goes directly into the kicker's own goal, a corner kick is awarded to the opponents."
+  },
+  {
+   "id": "h10",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.2,
+   "cost_usd": 0.0007471000000000005,
+   "answer": "Spitting at an opponent is a sending-off offence. Law 12 lists \"biting or spitting at someone\" among the offences that result in the player being sent off, and the referee shows the red card (Law 12). The same applies to spitting at a substitute, team official, match official, spectator or any other person."
+  },
+  {
+   "id": "h11",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.0,
+   "cost_usd": 0.0005573000000000002,
+   "answer": "If the ball bursts during play, the referee stops play and restarts it with a dropped ball (Law 2). If the ball becomes defective at a kick-off, goal kick, corner kick, free kick, penalty kick or throw-in, that restart is retaken instead. If it happens during a penalty kick or penalty shoot-out before the ball touches a player, crossbar or goalposts, the penalty kick is retaken. The ball may not be changed during the match without the referee's permission (Law 2)."
+  },
+  {
+   "id": "h12",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.9,
+   "cost_usd": 0.0007246000000000023,
+   "answer": "No. Under Law 11, a player is not in an offside position if he is level with the second-last opponent or the last two opponents. Since the goalkeeper is usually the last opponent, a player level with the last outfield defender is normally level with the second-last opponent and so onside. A player is offside only if any part of his head, body or feet is nearer the opponents' goal line than both the ball and the second-last opponent, and he is in the opponents' half (Law 11)."
+  },
+  {
+   "id": "h13",
+   "found": true,
+   "searches": 1,
+   "latency_s": 3.8,
+   "cost_usd": 0.0005750999999999985,
+   "answer": "A dropped ball goes to the goalkeeper only when play was stopped with the ball inside the penalty area. In that case, the referee drops it for the defending team's goalkeeper within their own penalty area (Law 8). If the ball was outside the penalty area, it is dropped for one player of the team that would have retained or gained possession, or, if that can't be determined, one player of the team that last touched it (Law 8)."
+  },
+  {
+   "id": "h14",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.0,
+   "cost_usd": 0.0007820000000000014,
+   "answer": "Yes, in a sense, but the restriction runs against the opposing team, not the team taking the kick. Under Law 16, the ball must be kicked from within the goal area by a player of the defending team, and opponents must be outside the penalty area until the ball is in play. If an opponent is still inside because they did not have time to leave, the referee lets play continue. If an opponent who is in the box when the kick is taken, or who enters it before the ball is in play, touches or challenges for the ball, the goal kick is retaken (Law 16). The rules I retrieved do not say anything about the kicking team's own players, so I can't confirm their positioning from the passages."
+  },
+  {
+   "id": "h15",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.8,
+   "cost_usd": 0.0008079000000000003,
+   "answer": "Yes. A coach is a team official, and under Law 12 a team official who commits a cautionable offence is disciplined accordingly. The yellow card communicates a caution, and only a player, substitute, substituted player or team official may be shown a red or yellow card (Law 12). Cautionable offences by team officials in the technical area include dissent by word or action, deliberately delaying the restart of play, and clearly and persistently not respecting the confines of the technical area. Repeated or blatant offences can lead to a sending-off."
+  },
+  {
+   "id": "h16",
+   "found": true,
+   "searches": 1,
+   "latency_s": 5.6,
+   "cost_usd": 0.0006561000000000032,
+   "answer": "The referee keeps the time. Law 5 lists \"acts as timekeeper\" among the referee's powers and duties, alongside keeping a record of the match. The referee also decides the allowance for time lost in each half under Law 7. The fourth official indicates the minimum additional time at the end of the final minute of each half, but the referee may increase that time and may not reduce it."
+  },
+  {
+   "id": "h17",
+   "found": true,
+   "searches": 2,
+   "latency_s": 7.6,
+   "cost_usd": 0.0014827999999999994,
+   "answer": "The Laws of the Game I retrieved don't mention weather directly, so I can't confirm a specific rule for it. Under Law 5, the referee has the power to stop, suspend or abandon a match because of outside interference, with the example of inadequate floodlights. The referee also has discretion to take appropriate action within the Laws. That suggests a referee can halt or abandon a match for conditions outside the players' control, such as dangerous weather, but the passages don't say so explicitly. For the exact wording on weather, check the full text of Law 5 or the competition's own regulations."
+  },
+  {
+   "id": "h18",
+   "found": true,
+   "searches": 1,
+   "latency_s": 6.8,
+   "cost_usd": 0.0005526000000000003,
+   "answer": "The fourth official is one of the \"on-field\" match officials and works under the referee's direction (Law 6). Their assistance includes supervising the substitution procedure, checking players' and substitutes' equipment, and supervising the re-entry of a player after the referee's signal or approval. They also supervise replacement balls, indicate the minimum additional time the referee intends to play at the end of each half (including extra time), and inform the referee of irresponsible behaviour by any technical area occupant. Finally, a reserve assistant referee may replace the fourth official if they are unable to continue (Law 6)."
+  },
+  {
+   "id": "h19",
+   "found": true,
+   "searches": 3,
+   "latency_s": 11.7,
+   "cost_usd": 0.0022182999999999994,
+   "answer": ""
+  },
+  {
+   "id": "h20",
+   "found": true,
+   "searches": 1,
+   "latency_s": 6.9,
+   "cost_usd": 0.0007736000000000028,
+   "answer": "Yes, the goalkeeper can be penalised, but the sanction is a corner kick, not a card. If a goalkeeper inside their penalty area controls the ball with their hands or arms for more than eight seconds before releasing it, the referee awards a corner kick to the opposing team (Law 12). The referee decides when the goalkeeper gains control and starts the eight-second count, and visibly counts down the final five seconds with a raised hand. The goalkeeper also cannot be challenged by an opponent while holding the ball in this way."
+  },
+  {
+   "id": "h21",
+   "found": true,
+   "searches": 2,
+   "latency_s": 8.4,
+   "cost_usd": 0.0013050000000000006,
+   "answer": "Under Law 4, a brace made of soft, lightweight padded material is permitted, since the Law allows \"knee and arm protectors made of soft, lightweight padded material.\" Anything dangerous must be removed, and it cannot simply be taped or covered over. If a player wears unauthorised or dangerous equipment, the referee must order them to remove it, or leave the field at the next stoppage if they refuse (Law 4).\n\nThe passages I found do not address a rigid cast specifically. The question for the referee is whether the item is dangerous, and a hard cast would need to be judged against that test. For a definitive answer on a specific cast, the competition organiser or the referee would need to decide."
+  },
+  {
+   "id": "h22",
+   "found": true,
+   "searches": 1,
+   "latency_s": 4.8,
+   "cost_usd": 0.000726499999999998,
+   "answer": "The Laws don't give one fixed number for bench seats. Law 3 says the competition rules set how many substitutes may be named, from three to a maximum of fifteen. In senior international matches, up to fifteen substitutes can be named, and eight of them can be used, unless both teams agree to up to eleven. In other matches, if no agreement is reached or the referee isn't informed, each team is limited to six substitutes. Law 1 adds that the number of people allowed in the technical area, which includes the substitutes' seating, is also set by the competition rules. So the bench capacity depends on the competition, and the Laws don't state a seat count directly."
+  }
+ ]
+}
