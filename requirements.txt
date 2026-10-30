@@ -15,4 +15,5 @@ httpx
 langgraph
 langchain-anthropic
 langchain-ollama
-mcp>=2,<3
+mcp>=1.24,<2  # langchain-mcp-adapters does not support mcp 2 yet
+langchain-mcp-adapters
