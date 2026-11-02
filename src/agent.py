@@ -6,6 +6,8 @@ wrong arguments. The loop must survive all of that and always return an answer.
 
 import os
 
+from langsmith import traceable
+
 from src.llm import LLMResponse, chat
 from src.rag_tool import retrieve, to_search_query
 from src.sql_tool import answer_with_sql
@@ -74,6 +76,7 @@ TOOLS = [
 
 # --- The tools. Each one returns {"content": text for the LLM, plus what the evaluation needs}. ---
 
+@traceable(run_type="tool", name="query_stats_database (function)")  # distinct from LangGraph's @tool wrapper
 def query_stats_database(question: str) -> dict:
     result = answer_with_sql(question)
     if result["rows"] is None:
@@ -85,6 +88,7 @@ def query_stats_database(question: str) -> dict:
     return {"content": content, "sql": result["sql"], "tokens": result["tokens"], "latency_s": result["latency_s"]}
 
 
+@traceable(run_type="tool", name="search_laws_of_the_game (function)")  # distinct from LangGraph's @tool wrapper
 def search_laws_of_the_game(query: str) -> dict:
     translation = to_search_query(query)  # safety net if the query is not in English
     passages = retrieve(translation.text)
@@ -120,6 +124,7 @@ def tool_message(tool_name: str, content: str) -> dict:
     return {"role": "tool", "tool_name": tool_name, "content": content}
 
 
+@traceable(name="hand_written_agent")  # the root span: one trace per question
 def run_agent(question: str) -> dict:
     """Answer a question with the tools. Returns
     {"answer": str, "tools_used": [tool names], "sql": [queries], "passages": [chunks],

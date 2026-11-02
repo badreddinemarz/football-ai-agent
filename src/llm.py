@@ -15,6 +15,8 @@ import time
 import anthropic
 import ollama
 from dotenv import load_dotenv
+from langsmith import traceable
+from langsmith.wrappers import wrap_anthropic
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 MODEL = os.getenv("LLM_MODEL", "qwen2.5:7b")
@@ -55,6 +57,7 @@ def chat(messages: list[dict], tools: list[dict] | None = None, temperature: flo
     return response
 
 
+@traceable(run_type="llm", name="ollama")  # a span per call to the local model
 def _chat_ollama(model: str, messages: list[dict], tools: list[dict] | None, temperature: float) -> LLMResponse:
     messages = [{k: v for k, v in m.items() if k != "raw"} for m in messages]  # Ollama does not know "raw"
     response = ollama.chat(model=model, messages=messages, tools=tools, options={"temperature": temperature})
@@ -70,7 +73,8 @@ def _chat_ollama(model: str, messages: list[dict], tools: list[dict] | None, tem
 
 @lru_cache(maxsize=1)
 def _claude_client() -> anthropic.Anthropic:
-    return anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
+    # wrap_anthropic: each call to Claude becomes a span (messages, answer, tokens) when LangSmith tracing is on
+    return wrap_anthropic(anthropic.Anthropic())  # reads ANTHROPIC_API_KEY
 
 
 def _chat_claude(model: str, messages: list[dict], tools: list[dict] | None, effort: str | None,

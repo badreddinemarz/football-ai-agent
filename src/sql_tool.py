@@ -7,6 +7,8 @@ import re
 import duckdb
 import pandas as pd
 
+from langsmith import traceable
+
 from src.llm import chat
 
 DB_PATH = Path(__file__).resolve().parents[1] / "data" / "football.duckdb"
@@ -116,6 +118,7 @@ def schema_description() -> str:
     return "Tables:\n" + "\n".join(lines) + "\n\nRules:" + SCHEMA_NOTES
 
 
+@traceable(name="run_sql")  # a span per query: the SQL in, the rows out
 def run_sql(query: str, max_rows: int = MAX_ROWS) -> pd.DataFrame:
     """Validate then execute a query. The connection is read-only as a second safety net."""
     safe_query = validate_sql(query)
@@ -138,6 +141,7 @@ def extract_sql(text: str) -> str:
     return clean_sql(text)
 
 
+@traceable(name="answer_with_sql")
 def answer_with_sql(question: str, max_attempts: int = 2, cot: bool | None = None) -> dict:
     """The LLM writes a query and we run it. If it fails, the error goes back to the LLM for a new try.
 

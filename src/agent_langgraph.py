@@ -196,3 +196,14 @@ def summarize(messages: list, latency_s: float) -> dict:
             result["contexts"].append(output["content"])
             result["tokens"] += output["tokens"]
     return result
+
+
+if __name__ == "__main__":
+    # .venv/Scripts/python -m src.agent_langgraph "Your question"      (traced in LangSmith if LANGSMITH_TRACING=true)
+    import sys
+    from langchain_core.tracers.langchain import wait_for_all_tracers
+
+    llm.MODEL = "claude-haiku-5-5"
+    result = run_agent(" ".join(sys.argv[1:]) or "How many goals did Kylian Mbappe score at the 2022 World Cup?")
+    print(result["answer"], "\n\ntools:", result["tools_used"], f"\n{result['tokens']} tokens, {result['latency_s']:.1f} s")
+    wait_for_all_tracers()  # traces are sent in the background: wait for them before the program exits

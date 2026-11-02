@@ -9,6 +9,8 @@ import chromadb
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
 
+from langsmith import traceable
+
 from src.llm import LLMResponse, chat
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -157,6 +159,7 @@ def to_search_query(question: str) -> LLMResponse:
     return response
 
 
+@traceable(name="retrieve")  # a span per search: the query in, the passages out
 def retrieve(question: str, k: int = 5) -> list[dict]:
     """The k chunks closest in meaning to the question, closest first."""
     result = laws_collection().query(query_embeddings=embed([question], "query"), n_results=k)

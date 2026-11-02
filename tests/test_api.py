@@ -42,3 +42,26 @@ def test_ask_reports_an_unavailable_agent(monkeypatch):
     monkeypatch.setattr(api, "run_agent", broken)
     response = client.post("/ask", json={"question": "Messi goals?"})
     assert response.status_code == 503
+
+
+def test_the_langgraph_agent_keeps_a_conversation(monkeypatch):
+    seen_threads = []
+
+    def fake_langgraph_ask(question, thread_id):
+        seen_threads.append(thread_id)
+        return fake_agent(question)
+    monkeypatch.setattr(api, "AGENT", "langgraph")
+    monkeypatch.setattr(api, "langgraph_ask", fake_langgraph_ask)
+
+    first = client.post("/ask", json={"question": "How many goals did Messi score?"}).json()
+    second = client.post("/ask", json={"question": "And Mbappe?", "conversation_id": first["conversation_id"]}).json()
+    other = client.post("/ask", json={"question": "And Mbappe?"}).json()
+
+    assert first["conversation_id"] and second["conversation_id"] == first["conversation_id"]
+    assert other["conversation_id"] != first["conversation_id"]  # no id sent: a new conversation
+    assert seen_threads == [first["conversation_id"], first["conversation_id"], other["conversation_id"]]
+
+
+def test_the_hand_written_agent_has_no_conversation_id(monkeypatch):
+    monkeypatch.setattr(api, "run_agent", fake_agent)
+    assert client.post("/ask", json={"question": "Messi goals?"}).json()["conversation_id"] is None
