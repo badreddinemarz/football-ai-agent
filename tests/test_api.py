@@ -1,10 +1,17 @@
 """Tests of the REST API without any LLM: run_agent is replaced by a fake."""
 
+import pytest
 from fastapi.testclient import TestClient
 
 import app.api as api
 
 client = TestClient(api.app)
+
+
+@pytest.fixture(autouse=True)
+def hand_written_agent_by_default(monkeypatch):
+    """The tests choose the agent themselves: they must not depend on an AGENT variable set in the environment."""
+    monkeypatch.setattr(api, "AGENT", "handwritten")
 
 
 def fake_agent(question):

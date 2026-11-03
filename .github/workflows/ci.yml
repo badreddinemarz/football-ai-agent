@@ -1,0 +1,44 @@
+# Runs on every push and pull request. No API key and no data here, on purpose:
+#   - tests:  the pytest suite (fake LLMs; tests that need data/football.duckdb are skipped)
+#   - docker: the image builds from scratch, starts, answers /health, and reports a missing key with a 503
+# The real quality of the answers is measured separately, by eval/evaluate.py with a real LLM.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install dependencies (CPU-only torch, as in the Dockerfile)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+      - name: Run the tests
+        run: python -m pytest -q
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t football-agent .
+      - name: Start a container without key and without data
+        run: docker run -d --name api -p 8000:8000 football-agent
+      - name: The API starts and answers /health
+        run: |
+          for i in $(seq 1 60); do curl -sf http://localhost:8000/health && exit 0; sleep 3; done
+          docker logs api; exit 1
+      - name: Without a key, /ask answers 503 instead of crashing
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:8000/ask \
+                 -H "Content-Type: application/json" -d '{"question": "How many goals did Mbappe score?"}')
+          echo "HTTP $code"; test "$code" = "503"

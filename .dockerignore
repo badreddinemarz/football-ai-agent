@@ -1,0 +1,12 @@
+# Never sent to Docker when building the image: secrets, data (mounted at run time), local environments
+.env
+.venv/
+data/
+.git/
+eval/runs/
+practice/
+CLAUDE.md
+.mcp.json
+**/__pycache__/
+.pytest_cache/
+*.log

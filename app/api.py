@@ -8,6 +8,7 @@ The agent is the one of AGENT: "handwritten" (src/agent.py, the default) or "lan
 which also remembers conversations: send back the conversation_id of an answer to ask a follow-up question).
 """
 
+import logging
 import os
 import uuid
 from contextlib import asynccontextmanager
@@ -26,7 +27,10 @@ AGENT = os.getenv("AGENT", "handwritten")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Runs once when the server starts (before `yield`) and once when it stops (after)."""
-    retrieve("warm-up")  # load the embedding model and the index now, so that no user waits for it
+    try:
+        retrieve("warm-up")  # load the embedding model and the index now, so that no user waits for it
+    except Exception as e:  # e.g. no data/ folder (CI): start anyway, /ask will answer 503 until the data is there
+        logging.getLogger("uvicorn.error").warning("Warm-up failed, starting without it: %s", e)
     yield
 
 
